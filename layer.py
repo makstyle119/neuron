@@ -15,3 +15,12 @@ class Layer:
         #     else:
         #         outputs.append(0)  # or None, or 'muted'
         # return outputs
+
+    def train(self, target, inputs):
+        outputs = []
+        for neuron in self.neurons:
+            out = neuron.forward(inputs)  # Forward pass to get last output
+            if neuron.fired:
+                neuron.backward(target, inputs)
+            outputs.append(out)
+        return outputs
