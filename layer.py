@@ -7,14 +7,6 @@ class Layer:
 
     def forward(self, inputs):
         return [neuron.forward(inputs) for neuron in self.neurons]
-        # outputs = []
-        # for neuron in self.neurons:
-        #     out = neuron.forward(inputs)
-        #     if neuron.fired:
-        #         outputs.append(out)
-        #     else:
-        #         outputs.append(0)  # or None, or 'muted'
-        # return outputs
 
     def train(self, target, inputs):
         outputs = []

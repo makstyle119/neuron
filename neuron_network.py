@@ -6,41 +6,21 @@ class NeuralNetwork:
         self.layer_sizes = layer_sizes
         self.learning_rate = learning_rate
         for i, layer_obj in enumerate(layer_sizes):
-            # layer = Layer(num_neurons=layer_sizes[i], num_inputs_per_neuron=layer_sizes[i - 1], layer_id=i)
             layer = Layer(
                 num_neurons=layer_obj["num_of_neurons"],
                 num_inputs_per_neuron=layer_obj["num_inputs_per_neuron"],
-                layer_id=i+1 # layer_id starts from 1 for better readability
+                layer_id=i+1 
             )
             self.layers.append(layer)
-
-    def forward(self, inputs):
-        outputs = []
-        for layer in self.layers:
-            inputs = layer.forward(inputs)
-            outputs.append(inputs)  # keep track of each layer's output
-        return outputs[-1]  # final output only
     
-    # def train(self, inputs, target):
-    #     for i, layer in enumerate(self.layers):
-    #         layer.train(target, inputs)
-    def train(self, inputs, target):
-        layer_inputs = inputs
+    def forward(self, inputs):
+        val = inputs
         for layer in self.layers:
-            layer.forward(layer_inputs)  # Forward pass
-            out = layer.train(target, layer_inputs)
-            layer_inputs = out  # update inputs for next layer
-        # # Step 1: Forward pass
-        # layer_inputs = [inputs]
-        # for layer in self.layers:
-        #     output = layer.forward(layer_inputs[-1])
-        #     layer_inputs.append(output)
+            val = layer.forward(val)
+        return val
 
-        # # Step 2: Backward pass (only for final layer here)
-        # last_layer = self.layers[-1]
-        # for i, neuron in enumerate(last_layer.neurons):
-        #     neuron.backward(
-        #         target=target[i],  # e.g., target could be [1] or [0]
-        #         inputs=layer_inputs[-2],  # input that came to this layer
-        #         learning_rate=self.learning_rate
-        #     )
+    def train(self, inputs, target):
+        val = inputs
+        for layer in self.layers:
+            layer.forward(val)
+            val = layer.train(target, val)
