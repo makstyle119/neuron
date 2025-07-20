@@ -1,7 +1,7 @@
 from neuron_network import NeuralNetwork
 
 # 2 input neurons → 3 hidden neurons → 1 output neuron
-neuron_layer = [
+layer_config = [
     { 
         "num_of_neurons": 2, 
         "num_inputs_per_neuron": 2
@@ -15,15 +15,28 @@ neuron_layer = [
         "num_inputs_per_neuron": 3
     }
 ]
-nn = NeuralNetwork(neuron_layer, learning_rate=0.1)
-inputs = [1, 0]
-target = 1  # your desired output
 
-# Train the network
-for _ in range(10000):
-    nn.train(inputs, target)
+nn = NeuralNetwork(layer_config)
 
-# Predict something
-output = nn.forward(inputs)
-print("Prediction:", output)
+# ----- XOR Training -----
+if __name__ == "__main__":
+    xor_data = [
+        ([0, 0], [0]),
+        ([0, 1], [1]),
+        ([1, 0], [1]),
+        ([1, 1], [0]),
+    ]
 
+    nn.train(
+        xor_data,
+        epochs=100000,
+        learning_rate=0.1,
+        patience=3000,       # Wait max 3000 epochs for improvement
+        min_delta=0.00001    # Accept only meaningful improvements
+    )
+
+
+    print("\n--- Testing XOR ---")
+    for inputs, expected in xor_data:
+        prediction = nn.predict(inputs)
+        print(f"Input: {inputs} => Predicted: {prediction[0]:.4f}, Expected: {expected[0]}")
